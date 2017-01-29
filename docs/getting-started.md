@@ -1,31 +1,32 @@
-* [Getting Started with TypeScript](#getting-started-with-typescript)
-* [TypeScript Version](#typescript-version)
+* [TypeScript'e Başlarken](#typescripte-başlarken)
+* [TypeScript Sürümleri](#typescript-sürümleri)
+* [Örneklerin Kaynak Kodlarını İndirmek](#Örneklerin-kaynak-kodlarını-İndirmek)
 
-# Getting Started With TypeScript
+# TypeScript'e Başlarken
 
-TypeScript compiles into JavaScript. JavaScript is what you are actually going to execute (either in the browser or on the server). So you are going to need the following:
+TypeScript, JavaScript'e derlenmektedir. Aslında JavaScript sunucu tarafında ya da tarayıcıda çalışacak olan kodun kendisidir. Dolayısıyla uygulamanızı çalıştırabilmek için aşağıdaki kurulumları tamamlamanız gerekmektedir:
 
-* TypeScript compiler (OSS available [in source](https://github.com/Microsoft/TypeScript/) and on [NPM](https://www.npmjs.com/package/typescript))
-* A TypeScript editor (you can use notepad if you want but I use [alm 🌹](http://alm.tools). Also [lots of other IDES support it as well]( https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support))
+* TypeScript derleyicisi ([Kaynak Kodu](https://github.com/Microsoft/TypeScript/) ve [NPM](https://www.npmjs.com/package/typescript) paketi mevcuttur.)
+* Bir TypeScript editörü (Notepad ya da diğer birçok editörden bir tanesini kullanabilirsiniz. Örneğin bulut tabanlı olan [alm](http://alm.tools)'nin güzel bir örnek olması yanında [bir çok farklı editör de mevcuttur]( https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support).)
 
 
 ![](https://raw.githubusercontent.com/alm-tools/alm-tools.github.io/master/screens/main.png)
 
 
-## TypeScript Version
+## TypeScript Sürümleri
 
-Instead of using the *stable* TypeScript compiler we will be presenting a lot of new stuff in this book that may not be associated with a version number yet. I generally recommend people to use the nightly version because **the compiler test suite only catches more bugs over time**.
+Kitapta anlatacağımız bazı yeni özellikler henüz *kararlı* bir TypeScript derleyicisi tarafından desteklenmemektedir. Hatta bazıları henüz bir sürüm numarası ile bile ilişkilendirilmemiş olabilir.
 
-You can install it on the command line as
+TypeScript derleyicisini aşağıdaki komut ile bilgisayarınıza kurabilirsiniz,
 
 ```
 npm install -g typescript@next
 ```
 
-And now the command line `tsc` will be the latest and greatest. Various IDEs support it too, e.g.
+Bundan sonra komut satırına yazılacak olan `tsc` komutu, en son ve en iyi versiyonu olarak kullanılabilir olacaktır. Birçok editör bu sürümü desteklemektedir. Örneğin,
 
-* `alm` always ships with the latest TypeScript version.
-* You can ask vscode to use this version by creating `.vscode/settings.json` with the following contents:
+* `alm` her zaman son sürümünde en güncel TypeScript sürümü ile yayınlanmaktadır.
+* Eğer `vscode` kullanıyorsanız aşağıdaki içeriğe sahip bir `.vscode/settings.json` dosyası oluşturursanız son sürümü kullanacaktır:
 
 ```json
 {
@@ -33,12 +34,13 @@ And now the command line `tsc` will be the latest and greatest. Various IDEs sup
 }
 ```
 
-## Getting the Source Code
-The source for this book is available in the books github repository https://github.com/basarat/typescript-book/tree/master/code most of the code samples can be copied into alm and you can play with them as is. For code samples that need additional setup (e.g. npm modules), we will link you to the code sample before presenting the code. e.g.
+## Örneklerin Kaynak Kodlarını İndirmek
+Kitabın içerisindeki örneklerin kaynak kodlarına GitHub üzerinden https://github.com/Codefiction/typescript-book/tree/master/code adresinden ulaşabilirsiniz. Kodların büyük bir kısmı alm'ye kopyalandığında hemen çalıştırılabilir durumdadır.
+Ek bir kurulum gerektiren örnekler (örneğin npm modülleri) için kod bloğu anlatılmadan önce ilişkili kod ile ilgili aşağıdaki gibi bir referans verilecektir.
 
-`this/will/be/the/link/to/the/code.ts`
+`bu/referans/olacak/kodun/adresi.ts`
 ```ts
-// This will be the code under discussion
+// Örneklerde anlatılan kodun kendisi
 ```
 
-With a dev setup out of the way let's jump into TypeScript syntax.
+Geliştirme ortamının kurulumunu tamamladığımıza göre artık TypeScript diline giriş yapabiliriz.
