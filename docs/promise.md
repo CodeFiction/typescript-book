@@ -1,10 +1,10 @@
 ## Promise
 
-The `Promise` class is something that exists in many modern JavaScript engines and can be easily [polyfilled][polyfill]. The main motivation for promises is to bring synchronous style error handling to Async / Callback style code.
+Promise, pek çok modern Javascript motorunda bulunan ve rahatlıkla polyfill edilebilen bir sınıftır. Promise'lerin öncelikli amacı Async/Callback stili yazılmış koda senkronize stilde hata yakalama fonksiyonunu kazandırmaktır.
 
 ### Callback style code
 
-In order to fully appreciate promises let's present a simple sample that proves the difficulty of creating reliable Async code with just callbacks. Consider the simple case of authoring an async version of loading JSON from a file. A synchronous version of this can be quite simply
+Promise'in sağladığı kolaylıkları daha iyi anlamak için sadece Callback kullanarak Async kod yazan bir örnek görelim. Bir JSON dosyasından asenkron bir şekilde dosya okuma örneğini değerlendirelim. Senkronize bir vesiyonu oldukça kolay olacaktır:
 
 ```ts
 import fs = require('fs');
@@ -13,10 +13,10 @@ function loadJSONSync(filename: string) {
     return JSON.parse(fs.readFileSync(filename));
 }
 
-// good json file
+// geçerli json dosyası
 console.log(loadJSONSync('good.json'));
 
-// non-existent file, so fs.readFileSync fails
+// olmayan json dosyası. bu yüzden fs.readFilesync hata verir
 try {
     console.log(loadJSONSync('absent.json'));
 }
@@ -24,7 +24,7 @@ catch (err) {
     console.log('absent.json error', err.message);
 }
 
-// invalid json file i.e. the file exists but contains invalid JSON so JSON.parse fails
+// geçersiz json dosyası. dosya var ama içindeki JSON geçersiz. bu yüzden JSON.parse hata verir
 try {
     console.log(loadJSONSync('invalid.json'));
 }
@@ -33,7 +33,7 @@ catch (err) {
 }
 ```
 
-There are three behaviors of this simple `loadJSONSync` function, a valid return value, a file system error or a JSON.parse error. We handle the errors with a simple try/catch as you are used to when doing synchronous programming in other languages. Now let's make a good async version of such a function. A decent initial attempt with a trivial error checking logic would be as follows,
+Bu basit `loadJSONSync` fonksiyonunun üç davranışı vardır. Geçerli bir dönüş değeri, bir dosya sistemi hatası ya da JSON.parse hatası. Bu hataları diğer senkronize çalışan dillerde yaptığımız gibi basit try/catch bloğu ile yakalıyoruz. Şimdi bu fonksiyonun düzgün çalışan bir asenkron versiyonunu yapalım. Düzgün bir ilk deneme (with a trivial error checking) aşağıdaki şekilde olacaktır.
 
 ```ts
 import fs = require('fs');
@@ -47,12 +47,12 @@ function loadJSON(filename: string, cb: (error: Error, data: any) => void) {
 }
 ```
 
-Simple enough, it takes a callback, passes any file system errors to the callback. If no filesystem errors, it returns the `JSON.parse` result. A few points to keep in mind when working with async functions based on callbacks are
+Yeteri kadar basit, bir callback alır, bulduğu dosya sistemi hatalarını callback'e iletir. Eğer dosya sistemi hatası yok ise JSON.parse işleminin sonucunu döndürür. Callback'lere dayalı asenkron fonksiyonlarla çalışılırken unutulmaması gereken noktalar:
 
-1. Never call the callback twice.
-1. Never throw an error.
+1. Bir callback'i asla iki defa çağırmamak
+2. Asla hata fırlatmamak
 
-This simple function however fails to accommodate for point two. In fact `JSON.parse` throws an error if it is passed bad JSON and the callback never gets called and the application crashes. This is demonstrated in the below example:
+Bu basit fonksiyon 2. noktada çalışmakta problem yaşıyor. Aslında eğer geçersiz JSON verilir ise, JSON.parse hata verir, callback hiçbir zaman çağırılmaz ve uygulama çöker. Bu durum aşağıdaki örnekte gösterilmiştir.
 
 ```ts
 import fs = require('fs');
@@ -73,7 +73,7 @@ loadJSON('invalid.json', function (err, data) {
 });
 ```
 
-A naïve attempt at fixing this would be to wrap the `JSON.parse` in a try catch as shown in the below example:
+Bu durumu düzeltmek için naifçe bir çaba, JSON.parse'ı bir try/catch'e almak olurdu, aşağıdaki örnekteki gibi:
 
 ```ts
 import fs = require('fs');
@@ -102,6 +102,7 @@ loadJSON('invalid.json', function (err, data) {
 });
 ```
 
+Yine de bu kodda yakalaması zor bir hata var. Eğer JSON.parse değil de callback hata fırlatırsa, biz bunu try catch ile sarmaladığımız için catch çalışır ve callback'i bir daha çağırırız. Bu örnekte callback iki defa çağırılır! Bu aşağıdaki örnekte gösterilmiştir:
 However there is a subtle bug in this code. If the callback (`cb`), and not `JSON.parse`, throws an error, since we wrapped it in a `try`/`catch`, the `catch` executes and we call the callback again i.e. the callback gets called twice! This is demonstrated in the example below:
 
 ```ts
@@ -144,11 +145,11 @@ our callback called
 Error: Cannot read property 'bar' of undefined
 ```
 
-This is because our `loadJSON` function wrongfully wrapped the callback in a `try` block. There is a simple lesson to remember here.
+Bunun sebebi `loadJSON` fonksiyonumuzun yanlış biçimde callback'i bir `try` bloğu ile sarmalamış olmasıdır. Burada hatırlanması gereken küçük bir ders var.
 
-> Simple lesson: Contain all your sync code in a try catch, except when you call the callback.
+> küçük Bir Ders: Tüm senkronize kodunuzu bir try/catch içine alın, callback'i çağırdığnız yer hariç.
 
-Following this simple lesson, we have a fully functional async version of `loadJSON` as shown below:
+Bu küçük dersi takip ederek `loadJSON` metodumuzun tamamen fonksiyonel asenkron çalışan bir versiyonunu elde ediyoruz:
 
 ```ts
 import fs = require('fs');
